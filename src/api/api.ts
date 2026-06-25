@@ -29,5 +29,5 @@ export const api = {
 
     // Отправка заявки
     createRequest: (data: { name: string; phone: string; email?: string; message?: string }) =>
-        axios.post(`${API_BASE}/requests`, data).then(res => res.data),
+        axios.post(`${API_BASE}/requests/`, data).then(res => res.data),
 };

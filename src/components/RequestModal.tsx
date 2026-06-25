@@ -92,10 +92,11 @@ export function RequestModal({ open, onClose }: RequestModalProps) {
                 <input
                     type="email"
                     name="email"
-                    placeholder="Email (необязательно)"
+                    placeholder="Email для получения заявки *"
                     className="input-soft"
                     value={form.email}
                     onChange={handleChange}
+                    required  // можно сделать обязательным
                 />
 
                 <textarea
