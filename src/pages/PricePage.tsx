@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { api } from '../api/api';
 
 interface PriceItem {
@@ -44,11 +45,14 @@ const PricePage: React.FC<PricePageProps> = ({ onRequest }) => {
 
     useEffect(() => {
         let filtered = allPrices;
+
         if (selectedGroup) filtered = filtered.filter(item => item.group_name === selectedGroup);
+
         if (searchTerm.trim()) {
             const term = searchTerm.toLowerCase().trim();
             filtered = filtered.filter(item => item.product_name.toLowerCase().includes(term));
         }
+
         setFilteredPrices(filtered);
         setCurrentPage(1);
     }, [searchTerm, selectedGroup, allPrices]);
@@ -64,62 +68,69 @@ const PricePage: React.FC<PricePageProps> = ({ onRequest }) => {
         }
     };
 
-    if (loading) return <div className="text-center py-10 text-gray-600">Загрузка прайс-листа...</div>;
-    if (error) return <div className="text-center py-10 text-red-600">{error}</div>;
+    if (loading) return <div className="page-shell text-center font-semibold text-graphite-500">Загрузка прайс-листа...</div>;
+
+    if (error) return <div className="page-shell text-center font-semibold text-red-600">{error}</div>;
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="page-shell max-w-7xl">
             {/* Заголовок и кнопки */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-800">Прайс с приемкой ОТК</h1>
-                    <p className="text-sm text-gray-500 mt-1">
-                        В оригинальном файле указаны отпускные цены за штуку без учета НДС, отдельно для партий более и менее 100 шт.
-                    </p>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                    <a
-                        href="http://localhost:8000/download-price"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition shadow-sm text-sm"
-                    >
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        Скачать PDF
-                    </a>
-                    {onRequest && (
-                        <button
-                            type="button"
-                            onClick={onRequest}
-                            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-sm text-sm"
+            <div className="surface-card relative mb-6 overflow-hidden p-6 sm:p-8">
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-factory-500 via-emerald-400 to-sky-400" />
+                <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
+                    <div>
+                        <span className="kicker">Прайс-лист</span>
+                        <h1 className="page-title mt-4 text-3xl sm:text-4xl">Прайс с приемкой ОТК</h1>
+                        <p className="page-subtitle text-sm sm:text-base">
+                            В оригинальном файле указаны отпускные цены за штуку без учета НДС, отдельно для партий более и менее 100 шт.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3">
+                        <a
+                            href="http://localhost:8000/download-price"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-light py-2.5"
                         >
-                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
-                            Связаться с продажами
-                        </button>
-                    )}
+                            Скачать PDF
+                        </a>
+
+                        {onRequest && (
+                            <button
+                                type="button"
+                                onClick={onRequest}
+                                className="btn-primary py-2.5"
+                            >
+                                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Связаться с продажами
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
 
             {/* Фильтры */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-6 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+            <div className="surface-card mb-6 flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
                 <div className="flex-1">
                     <input
                         type="text"
                         placeholder="Поиск по изделию..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                        className="input-soft"
                     />
                 </div>
                 <div>
                     <select
                         value={selectedGroup}
                         onChange={(e) => setSelectedGroup(e.target.value)}
-                        className="w-full sm:w-auto border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white text-sm"
+                        className="input-soft min-w-[220px] bg-white sm:w-auto"
                     >
                         <option value="">Все группы</option>
                         {groups.map(group => (
@@ -130,25 +141,26 @@ const PricePage: React.FC<PricePageProps> = ({ onRequest }) => {
             </div>
 
             {/* Таблица */}
-            <div className="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+            <div className="table-shell">
+                <table className="min-w-full divide-y divide-graphite-200/80">
+                    <thead className="bg-graphite-950 text-white">
                     <tr>
-                        <th className="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Изделие</th>
-                        <th className="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Группа</th>
-                        <th className="py-3 px-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">&gt; 100 шт.</th>
-                        <th className="py-3 px-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">&lt; 100 шт.</th>
+                        <th className="px-4 py-4 text-left text-xs font-black uppercase tracking-[0.18em] text-white/70">Изделие</th>
+                        <th className="px-4 py-4 text-left text-xs font-black uppercase tracking-[0.18em] text-white/70">Группа</th>
+                        <th className="px-4 py-4 text-right text-xs font-black uppercase tracking-[0.18em] text-white/70">&gt; 100 шт.</th>
+                        <th className="px-4 py-4 text-right text-xs font-black uppercase tracking-[0.18em] text-white/70">&lt; 100 шт.</th>
                     </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+
+                    <tbody className="divide-y divide-graphite-100">
                     {currentItems.map((item) => (
-                        <tr key={item.id} className="hover:bg-gray-50 transition">
-                            <td className="py-3 px-4 text-sm font-mono text-gray-800">{item.product_name}</td>
-                            <td className="py-3 px-4 text-sm text-gray-500">{item.group_name || '—'}</td>
-                            <td className="py-3 px-4 text-sm font-semibold text-green-600 text-right">
+                        <tr key={item.id} className="transition hover:bg-factory-50/60">
+                            <td className="px-4 py-4 font-mono text-sm font-semibold text-graphite-900">{item.product_name}</td>
+                            <td className="px-4 py-4 text-sm text-graphite-500">{item.group_name || '—'}</td>
+                            <td className="px-4 py-4 text-right text-sm font-black text-factory-700">
                                 {item.price_bulk?.toFixed(2) ?? '—'}
                             </td>
-                            <td className="py-3 px-4 text-sm font-semibold text-blue-600 text-right">
+                            <td className="px-4 py-4 text-right text-sm font-black text-sky-700">
                                 {item.price_retail?.toFixed(2) ?? '—'}
                             </td>
                         </tr>
@@ -158,51 +170,42 @@ const PricePage: React.FC<PricePageProps> = ({ onRequest }) => {
             </div>
 
             {/* Информация ОТК и пагинация */}
-            <div className="mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-sm text-gray-500">
+            <div className="mt-5 flex flex-col items-start justify-between gap-3 text-sm text-graphite-500 sm:flex-row sm:items-center">
                 <div className="flex items-center gap-2">
-                    <span className="inline-block px-3 py-1 bg-gray-100 rounded-full text-xs font-semibold text-gray-700">ОТК</span>
-                    <span className="text-xs text-gray-400">Контроль качества соблюдается</span>
+                    <span className="stat-pill">ОТК</span>
+                    <span className="text-xs text-graphite-400">Контроль качества соблюдается</span>
                 </div>
+
                 <div className="flex flex-wrap items-center gap-3">
-          <span className="bg-gray-100 px-3 py-1 rounded-full text-xs">
+          <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold shadow-card">
             {filteredPrices.length === 0 ? 0 : startIndex + 1} – {Math.min(startIndex + itemsPerPage, filteredPrices.length)} из {filteredPrices.length}
           </span>
+
                     <div className="flex gap-1">
                         <button
                             type="button"
                             onClick={() => goToPage(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition text-xs"
+                            className="rounded-full border border-graphite-200 bg-white px-3 py-1 text-xs font-bold transition hover:border-factory-300 hover:text-factory-700 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             Назад
                         </button>
-                        <span className="px-3 py-1 bg-green-100 text-green-700 rounded-md font-semibold text-xs">
+
+                        <span className="rounded-full bg-factory-50 px-3 py-1 text-xs font-black text-factory-700">
               {currentPage} / {totalPages}
             </span>
+
                         <button
                             type="button"
                             onClick={() => goToPage(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition text-xs"
+                            className="rounded-full border border-graphite-200 bg-white px-3 py-1 text-xs font-bold transition hover:border-factory-300 hover:text-factory-700 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             Вперёд
                         </button>
                     </div>
                 </div>
             </div>
-
-            {/* Дополнительная ссылка "Консультант" */}
-            {onRequest && (
-                <div className="mt-4 text-center">
-                    <button
-                        type="button"
-                        onClick={onRequest}
-                        className="text-sm text-green-600 hover:text-green-800 font-medium hover:underline transition"
-                    >
-                        Консультант
-                    </button>
-                </div>
-            )}
         </div>
     );
 };

@@ -31,7 +31,8 @@ type RouteId =
     | 'sout'
     | 'partners'
     | 'details'
-    | 'procurement';
+    | 'procurement'
+    | 'confidentiality';
 
 const routes: RouteId[] = [
   'home',
@@ -47,7 +48,8 @@ const routes: RouteId[] = [
   'sout',
   'partners',
   'details',
-  'procurement'
+  'procurement',
+  'confidentiality',
 ];
 
 function getRouteFromHash(): RouteId {
@@ -100,6 +102,8 @@ export default function App() {
         return <DetailsPage />;
       case 'procurement':
         return <ProcurementPage />;
+      case 'confidentiality':
+        return <DocumentPage type="Соглашение о конфиденциальности" />;
       case 'home':
       default:
         return <HomePage onRequest={openRequest} />;

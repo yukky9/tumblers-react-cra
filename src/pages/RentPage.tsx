@@ -1,69 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import { api } from '../api/api';
+import React from 'react';
+import { rentalInfo } from '../config/rental';
 
 interface RentPageProps {
     onRequest?: () => void;
 }
 
-interface Rental {
-    id: number;
-    title: string;
-    description: string;
-    area: string;
-    price: string;
-    image_url: string;
-}
-
 const RentPage: React.FC<RentPageProps> = ({ onRequest }) => {
-    const [rentals, setRentals] = useState<Rental[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        api.getRentals()
-            .then(data => {
-                setRentals(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error(err);
-                setError('Не удалось загрузить объекты аренды');
-                setLoading(false);
-            });
-    }, []);
-
-    if (loading) return <div className="text-center py-10 text-gray-600">Загрузка...</div>;
-    if (error) return <div className="text-center py-10 text-red-600">{error}</div>;
-
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-4xl font-bold mb-8 text-gray-800">Аренда</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {rentals.map(item => (
-                    <div key={item.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                        <img
-                            src={item.image_url || 'https://via.placeholder.com/400x250?text=Фото+объекта'}
-                            alt={item.title}
-                            className="w-full h-56 object-cover"
-                        />
-                        <div className="p-4">
-                            <h3 className="text-2xl font-semibold text-gray-800">{item.title}</h3>
-                            <p className="text-gray-600 mt-1">{item.description}</p>
-                            <div className="mt-3 flex flex-wrap gap-3 text-sm">
-                                <span className="bg-gray-100 px-3 py-1 rounded-full">Площадь: {item.area}</span>
-                                <span className="bg-factory-100 text-factory-700 px-3 py-1 rounded-full font-bold">{item.price}</span>
-                            </div>
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-4xl font-bold text-gray-800">Арендная деятельность</h1>
+                {onRequest && (
+                    <button
+                        type="button"
+                        onClick={onRequest}
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+                    >
+                        Запросить аренду
+                    </button>
+                )}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Основная информация */}
+                <div className="lg:col-span-2">
+                    <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+                        <div className="prose max-w-none">
+                            <p className="text-gray-700 text-lg leading-relaxed">{rentalInfo.description}</p>
+                        </div>
+
+                        <div className="mt-6">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-3">Преимущества:</h3>
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {rentalInfo.features.map((feature, index) => (
+                                    <li key={index} className="flex items-center gap-2 text-gray-700">
+                                        <span className="text-green-500">✓</span>
+                                        {feature}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
-                ))}
-            </div>
-            {onRequest && (
-                <div className="text-center mt-10">
-                    <button onClick={onRequest} className="bg-factory-600 text-white px-8 py-3 rounded-full hover:bg-factory-700 transition">
-                        Узнать подробнее
-                    </button>
                 </div>
-            )}
+
+                {/* Контактная информация */}
+                <div className="lg:col-span-1">
+                    <div className="bg-gradient-to-b from-green-50 to-white rounded-xl shadow-md p-6 border border-green-200 sticky top-20">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <span>📞</span> Контакты для связи
+                        </h3>
+                        <div className="space-y-4">
+                            <div>
+                                <p className="text-sm text-gray-500 font-medium">Телефон</p>
+                                <a
+                                    href={`tel:${rentalInfo.phone.replace(/[^+\d]/g, '')}`}
+                                    className="text-lg font-semibold text-green-700 hover:text-green-900 hover:underline transition"
+                                >
+                                    {rentalInfo.phone}
+                                </a>
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-500 font-medium">Электронная почта</p>
+                                <a
+                                    href={`mailto:${rentalInfo.email}`}
+                                    className="text-lg font-semibold text-green-700 hover:text-green-900 hover:underline transition"
+                                >
+                                    {rentalInfo.email}
+                                </a>
+                            </div>
+                        </div>
+
+                        {onRequest && (
+                            <button
+                                type="button"
+                                onClick={onRequest}
+                                className="mt-6 w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-semibold"
+                            >
+                                Оставить заявку
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

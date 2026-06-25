@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { Icon } from './Icon'; // Предполагается, что у вас есть компонент Icon
 import { api } from '../api/api'; // Для отправки заявки
 
@@ -22,9 +23,11 @@ export function RequestModal({ open, onClose }: RequestModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+
     try {
       await api.createRequest(form);
       setSuccess(true);
+
       setTimeout(() => {
         onClose();
         setSuccess(false);
@@ -38,65 +41,76 @@ export function RequestModal({ open, onClose }: RequestModalProps) {
   };
 
   return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative animate-fadeIn">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-graphite-950/70 p-4 backdrop-blur-sm">
+        <div className="animate-fadeIn relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/80 bg-white p-6 shadow-soft">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-factory-500 via-emerald-400 to-sky-400" />
+
           <button
               type="button"
               onClick={onClose}
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+              className="absolute right-4 top-4 rounded-full bg-graphite-50 p-2 text-graphite-500 transition hover:bg-graphite-100 hover:text-graphite-900"
               aria-label="Закрыть"
           >
-            <Icon name="close" className="h-6 w-6" />
+            <Icon name="close" className="h-5 w-5" />
           </button>
 
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Оставить заявку</h2>
+          <div className="pr-10">
+            <h2 className="font-display text-3xl font-black text-graphite-950">Оставить заявку</h2>
+          </div>
 
           {success ? (
-              <div className="text-green-600 text-center py-6">✅ Заявка отправлена!</div>
+              <div className="mt-6 rounded-2xl border border-factory-200 bg-factory-50 px-4 py-8 text-center font-black text-factory-700">
+                ✅ Заявка отправлена!
+              </div>
           ) : (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className="mt-6 grid gap-3">
                 <input
                     type="text"
                     name="name"
                     placeholder="Ваше имя *"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 mb-3 focus:outline-none focus:ring-2 focus:ring-factory-500"
+                    className="input-soft"
                     onChange={handleChange}
                     required
                 />
+
                 <input
                     type="tel"
                     name="phone"
                     placeholder="Телефон *"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 mb-3 focus:outline-none focus:ring-2 focus:ring-factory-500"
+                    className="input-soft"
                     onChange={handleChange}
                     required
                 />
+
                 <input
                     type="email"
                     name="email"
                     placeholder="Email (необязательно)"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 mb-3 focus:outline-none focus:ring-2 focus:ring-factory-500"
+                    className="input-soft"
                     onChange={handleChange}
                 />
+
                 <textarea
                     name="message"
                     placeholder="Сообщение"
                     rows={3}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-factory-500"
+                    className="input-soft resize-none"
                     onChange={handleChange}
                 />
-                <div className="flex justify-end gap-3">
+
+                <div className="mt-2 flex justify-end gap-3">
                   <button
                       type="button"
                       onClick={onClose}
-                      className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+                      className="btn-light py-2"
                   >
                     Отмена
                   </button>
+
                   <button
                       type="submit"
                       disabled={submitting}
-                      className="px-6 py-2 bg-factory-600 text-white rounded-lg hover:bg-factory-700 transition disabled:opacity-50"
+                      className="btn-primary py-2 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {submitting ? 'Отправка...' : 'Отправить'}
                   </button>
@@ -118,9 +132,10 @@ export function FloatingConsultant({ onRequest }: FloatingConsultantProps) {
       <button
           type="button"
           onClick={onRequest}
-          className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-factory-600 text-white shadow-lg transition hover:bg-factory-700 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-factory-500 focus:ring-offset-2"
+          className="fixed bottom-6 right-6 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-factory-500 to-emerald-500 text-white shadow-glow transition duration-300 hover:-translate-y-1 hover:brightness-110 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-factory-300/40"
           aria-label="Связаться с консультантом"
       >
+        <Icon name="mail" className="h-6 w-6" />
       </button>
   );
 }

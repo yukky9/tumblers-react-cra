@@ -18,7 +18,7 @@ const shareholderLinks = [
   ['Финансовые отчеты', '#/finance'],
   ['Раскрытие информации', sourceLinks.eDisclosure],
   ['Специальная оценка труда', '#/sout'],
-  ['Соглашение о конфиденциальности', '#/info']
+  ['Соглашение о конфиденциальности', '#/confidentiality']
 ];
 
 export function Footer({ onRequest }: { onRequest: () => void }) {
@@ -67,14 +67,12 @@ export function Footer({ onRequest }: { onRequest: () => void }) {
                 >
                   Вконтакте
                 </a>
-                <span className="rounded-full border border-white/12 px-4 py-2 text-sm font-semibold text-white/44">Telegram</span>
               </div>
             </div>
           </div>
 
           <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/44 sm:flex-row sm:items-center sm:justify-between">
-            <span>© ОАО «Смоленский завод радиодеталей». Демо-версия современного интерфейса.</span>
-            <span>React · TypeScript · Tailwind CSS</span>
+            <span>© ОАО «Смоленский завод радиодеталей».</span>
           </div>
         </div>
       </footer>
