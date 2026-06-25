@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+  <title id="title">Концерн Автоматика</title>
+  <desc id="desc">Декоративная фото-обложка карточки партнера</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="0.58" stop-color="#1e3a5f"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="75%" cy="30%" r="62%">
+      <stop offset="0" stop-color="#fde68a" stop-opacity="0.46"/>
+      <stop offset="1" stop-color="#fde68a" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0v42" fill="none" stroke="#fff" stroke-opacity="0.085" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="520" rx="42" fill="url(#bg)"/>
+  <rect width="900" height="520" rx="42" fill="url(#glow)"/>
+  <rect width="900" height="520" rx="42" fill="url(#grid)"/>
+  <g transform="translate(117 96)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <rect width="150" height="150" rx="36" fill="#fff" fill-opacity="0.12" stroke-opacity="0.28" stroke-width="3"/>
+    <path d="M45 78h62M76 47v62" stroke="#fedc8a" stroke-width="10"/>
+    <circle cx="45" cy="78" r="11" fill="#fff" fill-opacity="0.82" stroke="none"/>
+    <circle cx="107" cy="78" r="11" fill="#fff" fill-opacity="0.82" stroke="none"/>
+    <circle cx="76" cy="47" r="11" fill="#fff" fill-opacity="0.82" stroke="none"/>
+    <circle cx="76" cy="109" r="11" fill="#fff" fill-opacity="0.82" stroke="none"/>
+  </g>
+  <g opacity="0.46" stroke="#fff" stroke-width="4" fill="none">
+    <path d="M356 122h270l86 86v142"/>
+    <path d="M356 194h186l72 72h148"/>
+    <path d="M356 266h125l63 64h218"/>
+    <circle cx="762" cy="350" r="9" fill="#fff"/>
+    <circle cx="762" cy="266" r="9" fill="#fff"/>
+    <circle cx="712" cy="208" r="9" fill="#fff"/>
+  </g>
+  <text x="118" y="328" fill="#fff" font-size="60" font-weight="800" font-family="Arial, Helvetica, sans-serif">Автоматика</text>
+  <text x="122" y="376" fill="#ffe7a8" fill-opacity="0.86" font-size="24" font-weight="700" letter-spacing="5" font-family="Arial, Helvetica, sans-serif">КОНЦЕРН</text>
+</svg>

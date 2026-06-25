@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { partners } from '../config/partners';
 import { api } from '../api/api';
 import { Icon } from '../components/Icon';
 import { LinkButton, PageHero, SectionHeader } from '../components/UI';
@@ -168,26 +168,88 @@ export const DocumentPage: React.FC<DocumentPageProps> = ({ type }) => {
     );
 };
 
+type PartnerWithImage = {
+    name: string;
+    description: string;
+    image?: string;
+    imageUrl?: string;
+    image_url?: string;
+    logo?: string;
+    logo_url?: string;
+    photo?: string;
+};
+
+const partnerPhotoByName: Record<string, string> = {
+    'Госкорпорация Ростех': 'rostec.svg',
+    'Концерн Автоматика': 'automatika.svg',
+    'Электронные комплектующие «ЗИП»': 'zip.svg',
+};
+
+function getPartnerPhotoSrc(partner: PartnerWithImage): string {
+    const configuredPhoto =
+        partner.image ||
+        partner.imageUrl ||
+        partner.image_url ||
+        partner.logo ||
+        partner.logo_url ||
+        partner.photo;
+
+    const fileName = configuredPhoto || partnerPhotoByName[partner.name] || 'partner-default.svg';
+
+    if (/^(https?:)?\/\//.test(fileName) || fileName.startsWith('data:')) {
+        return fileName;
+    }
+
+    return `${process.env.PUBLIC_URL}/images/partners/${fileName.replace(/^\/+/, '')}`;
+}
+
 export const PartnersPage: React.FC = () => {
+    const fallbackPhoto = `${process.env.PUBLIC_URL}/images/partners/partner-default.svg`;
+
     return (
         <div>
             <PageHero
                 label="Партнеры"
                 title="Наши партнеры"
-                description="Статический раздел партнеров получил аккуратные карточки и визуальную иерархию."
+                description="Статический раздел партнеров получил фото, аккуратные карточки и визуальную иерархию."
             />
-
             <section className="page-shell pt-0">
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <article key={i} className="card-hover p-6 text-center">
-                            <div className="mx-auto grid h-20 w-20 place-items-center rounded-[1.4rem] bg-gradient-to-br from-graphite-950 to-factory-800 font-display text-2xl font-black text-white shadow-glow">
-                                П{i}
-                            </div>
-                            <p className="mt-5 font-display text-xl font-black text-graphite-950">Партнёр {i}</p>
-                            <p className="mt-2 text-sm text-graphite-500">ООО «Компания {i}»</p>
-                        </article>
-                    ))}
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {partners.map((partner, index) => {
+                        const partnerData = partner as PartnerWithImage;
+                        const photoSrc = getPartnerPhotoSrc(partnerData);
+
+                        return (
+                            <article key={partnerData.name || index} className="card-hover group overflow-hidden p-0">
+                                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-graphite-950 via-graphite-900 to-factory-800">
+                                    <div className="absolute inset-0 bg-grid-dark technical-grid opacity-25" />
+                                    <img
+                                        src={photoSrc}
+                                        alt={partnerData.name}
+                                        loading="lazy"
+                                        onError={(event) => {
+                                            event.currentTarget.onerror = null;
+                                            event.currentTarget.src = fallbackPhoto;
+                                        }}
+                                        className="relative h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-graphite-950/70 via-graphite-950/10 to-transparent" />
+                                    <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-black text-factory-700 shadow-card">
+                                        Партнер {String(index + 1).padStart(2, '0')}
+                                    </span>
+                                </div>
+
+                                <div className="p-6 text-left">
+                                    <p className="font-display text-xl font-black leading-tight text-graphite-950 text-balance">{partnerData.name}</p>
+                                    <p className="mt-3 line-clamp-5 text-sm leading-6 text-graphite-600">{partnerData.description}</p>
+                                    <div className="mt-5 flex items-center justify-between border-t border-graphite-100 pt-4 text-xs font-black uppercase tracking-[0.16em] text-graphite-400">
+                                        <span>Сотрудничество</span>
+                                        <Icon name="briefcase" className="h-4 w-4 text-factory-500" />
+                                    </div>
+                                </div>
+                            </article>
+                        );
+                    })}
                 </div>
             </section>
         </div>

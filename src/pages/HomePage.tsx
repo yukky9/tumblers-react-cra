@@ -77,41 +77,40 @@ const HomePage: React.FC<HomePageProps> = ({ onRequest }) => {
                     <SectionHeader
                         kicker="Продукция"
                         title="Популярные позиции каталога"
-                        description="Карточки продукции стали визуально чище: больше воздуха, понятная цена, аккуратные категории и единый промышленный стиль."
+                        description="Карточки продукции оформлены так же, как в каталоге: без фотографий, без ценовых блоков, с акцентом на название, группу и описание."
                         align="center"
                     />
 
                     {loading ? (
                         <div className="mt-12 text-center font-semibold text-graphite-500">Загрузка...</div>
                     ) : (
-                        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-                            {featuredProducts.map(product => (
-                                <article key={product.id} className="card-hover overflow-hidden p-4">
-                                    <div className="relative grid h-56 place-items-center overflow-hidden rounded-[1.35rem] bg-gradient-to-br from-white via-graphite-50 to-factory-50/50 p-4">
-                                        <div className="absolute inset-0 bg-grid-light technical-grid opacity-40" />
-                                        {product.image_url ? (
-                                            <img src={product.image_url} alt={product.name} className="relative h-full w-full object-contain transition duration-500 hover:scale-105" />
-                                        ) : (
-                                            <div className="relative grid h-24 w-24 place-items-center rounded-3xl bg-graphite-950 text-factory-200 shadow-card">
-                                                <Icon name="factory" className="h-10 w-10" />
-                                            </div>
-                                        )}
-                                        {product.category ? (
-                                            <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-black text-factory-700 shadow-card">
-                        {product.category}
-                      </span>
-                                        ) : null}
+                        <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+                            {featuredProducts.map((product, index) => (
+                                <article key={product.id} className="card-hover group relative overflow-hidden p-5">
+                                    <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-factory-500 via-signal-400 to-factory-500 opacity-80" />
+
+                                    <div className="flex items-start gap-4">
+                                        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-dark-surface text-factory-200 shadow-card transition duration-300 group-hover:-translate-y-1 group-hover:rotate-3">
+                                            <span className="font-display text-lg font-black">{String(index + 1).padStart(2, '0')}</span>
+                                        </div>
+
+                                        <div className="min-w-0 flex-1">
+                                            {product.category ? (
+                                                <span className="inline-flex max-w-full rounded-full bg-factory-50 px-3 py-1 text-xs font-black text-factory-700">
+                          <span className="truncate">{product.category}</span>
+                        </span>
+                                            ) : null}
+                                            <h3 className="mt-3 font-display text-2xl font-black leading-tight text-graphite-950 text-balance">
+                                                {product.name}
+                                            </h3>
+                                        </div>
                                     </div>
 
-                                    <div className="p-2 pt-5">
-                                        <h3 className="font-display text-2xl font-black leading-tight text-graphite-950">{product.name}</h3>
-                                        <p className="mt-3 line-clamp-3 text-sm leading-6 text-graphite-600">{product.description}</p>
-                                        <div className="mt-5 flex items-center justify-between gap-4 border-t border-graphite-100 pt-4">
-                                            <span className="text-2xl font-black text-factory-700">{product.price} ₽</span>
-                                            <a href="#/catalog" className="rounded-full bg-graphite-950 px-3 py-1 text-xs font-black text-white transition hover:bg-factory-700">
-                                                Подробнее
-                                            </a>
-                                        </div>
+                                    <p className="mt-5 line-clamp-4 text-sm leading-6 text-graphite-600">{product.description}</p>
+
+                                    <div className="mt-5 flex items-center justify-between border-t border-graphite-100 pt-4 text-xs font-black uppercase tracking-[0.16em] text-graphite-400">
+                                        <span>Продукция</span>
+                                        <Icon name="settings" className="h-4 w-4 text-factory-500" />
                                     </div>
                                 </article>
                             ))}
