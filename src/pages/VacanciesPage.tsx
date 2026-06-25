@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+
 import { api } from '../api/api';
+import { Icon } from '../components/Icon';
+import { ActionButton, PageHero, SectionHeader } from '../components/UI';
 
 interface VacanciesPageProps {
     onRequest?: () => void;
@@ -31,64 +34,110 @@ const VacanciesPage: React.FC<VacanciesPageProps> = ({ onRequest }) => {
             });
     }, []);
 
-    if (loading) return <div className="page-shell text-center font-semibold text-graphite-500">Загрузка вакансий...</div>;
-    if (error) return <div className="page-shell text-center font-semibold text-red-600">{error}</div>;
-
-    // Функция для разбивки требований и обязанностей по строкам (если есть разделители)
     const splitIntoItems = (text: string): string[] => {
         if (!text) return [];
-        // Разбиваем по точкам с запятой, запятым или переносам строк
         return text.split(/[;,\n]/).map(s => s.trim()).filter(s => s.length > 0);
     };
 
-    return (
-        <div className="page-shell">
-            <div className="mb-10">
-                <h1 className="page-title">Вакансии</h1>
-            </div>
-
-            <div className="space-y-5">
-                {vacancies.map(vacancy => (
-                    <div key={vacancy.id} className="card-hover overflow-hidden p-6">
-                        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                            <div className="max-w-3xl">
-                                <h3 className="font-display text-2xl font-black text-graphite-950">{vacancy.title}</h3>
-                                <div className="mt-3">
-                                    <h4 className="text-sm font-bold uppercase tracking-[0.1em] text-factory-700">Обязанности</h4>
-                                    <ul className="list-disc list-inside text-sm leading-7 text-graphite-600">
-                                        {splitIntoItems(vacancy.description).map((item, idx) => (
-                                            <li key={idx}>{item}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="grid min-w-[260px] gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                                <div className="rounded-2xl border border-factory-100 bg-factory-50 p-4">
-                                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-factory-700">Зарплата</span>
-                                    <p className="mt-1 font-black text-graphite-950">{vacancy.salary || 'по договорённости'}</p>
-                                </div>
-                                <div className="rounded-2xl border border-graphite-100 bg-graphite-50 p-4">
-                                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-graphite-400">Требования</span>
-                                    <ul className="mt-1 text-sm font-semibold leading-6 text-graphite-700 list-disc list-inside">
-                                        {splitIntoItems(vacancy.requirements).map((req, idx) => (
-                                            <li key={idx}>{req}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {onRequest && (
-                <div className="mt-10 text-center">
-                    <button type="button" onClick={onRequest} className="btn-primary px-8">
-                        Откликнуться на вакансию
-                    </button>
+    if (loading) {
+        return (
+            <div className="page-shell text-center">
+                <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-white shadow-card">
+                    <Icon name="settings" className="h-7 w-7 animate-spin text-factory-600" />
                 </div>
-            )}
+                <p className="mt-4 font-semibold text-graphite-500">Загрузка вакансий...</p>
+            </div>
+        );
+    }
+
+    if (error) return <div className="page-shell text-center font-semibold text-red-600">{error}</div>;
+
+    return (
+        <div>
+            <PageHero
+                label="Вакансии"
+                title="Работа на производственном предприятии"
+                description="Список вакансий отображается из прежнего API, но карточки стали удобнее: обязанности, требования и зарплата разделены визуально."
+            >
+                {onRequest ? <ActionButton onClick={onRequest}>Откликнуться</ActionButton> : null}
+            </PageHero>
+
+            <section className="page-shell pt-0">
+                <SectionHeader
+                    kicker="Карьера"
+                    title="Открытые вакансии"
+                    description="Карточки сохраняют прежние данные и помогают быстро понять условия по каждой позиции."
+                    align="center"
+                />
+
+                <div className="mt-12 space-y-5">
+                    {vacancies.map(vacancy => {
+                        const duties = splitIntoItems(vacancy.description);
+                        const requirements = splitIntoItems(vacancy.requirements);
+
+                        return (
+                            <article key={vacancy.id} className="card-hover overflow-hidden p-6 sm:p-7">
+                                <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                                    <div className="max-w-3xl">
+                                        <span className="stat-pill">Вакансия</span>
+                                        <h3 className="mt-4 font-display text-2xl font-black text-graphite-950 sm:text-3xl">{vacancy.title}</h3>
+
+                                        <div className="mt-6 grid gap-5 md:grid-cols-2">
+                                            <div>
+                                                <h4 className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-graphite-500">
+                                                    <Icon name="briefcase" className="h-4 w-4 text-factory-600" />
+                                                    Обязанности
+                                                </h4>
+                                                <ul className="mt-3 space-y-2 text-sm leading-6 text-graphite-600">
+                                                    {duties.map((item, idx) => (
+                                                        <li key={`${item}-${idx}`} className="flex gap-2">
+                                                            <Icon name="check" className="mt-1 h-4 w-4 shrink-0 text-factory-600" />
+                                                            <span>{item}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+
+                                            <div>
+                                                <h4 className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-graphite-500">
+                                                    <Icon name="shield" className="h-4 w-4 text-factory-600" />
+                                                    Требования
+                                                </h4>
+                                                <ul className="mt-3 space-y-2 text-sm leading-6 text-graphite-600">
+                                                    {requirements.map((req, idx) => (
+                                                        <li key={`${req}-${idx}`} className="flex gap-2">
+                                                            <Icon name="check" className="mt-1 h-4 w-4 shrink-0 text-factory-600" />
+                                                            <span>{req}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid min-w-[250px] gap-3">
+                                        <div className="rounded-2xl border border-factory-100 bg-factory-50 p-5">
+                                            <span className="text-xs font-black uppercase tracking-[0.18em] text-factory-700">Зарплата</span>
+                                            <p className="mt-2 font-display text-2xl font-black text-graphite-950">{vacancy.salary || 'по договорённости'}</p>
+                                        </div>
+                                        {onRequest ? (
+                                            <button type="button" onClick={onRequest} className="btn-light w-full py-2.5">
+                                                Откликнуться
+                                            </button>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            </article>
+                        );
+                    })}
+                </div>
+
+                {onRequest ? (
+                    <div className="mt-12 text-center">
+                        <ActionButton onClick={onRequest}>Откликнуться на вакансию</ActionButton>
+                    </div>
+                ) : null}
+            </section>
         </div>
     );
 };

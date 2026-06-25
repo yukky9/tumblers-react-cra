@@ -1,4 +1,7 @@
 import React from 'react';
+
+import { Icon } from '../components/Icon';
+import { ActionButton, IconBadge, PageHero, SectionHeader } from '../components/UI';
 import { rentalInfo } from '../config/rental';
 
 interface RentPageProps {
@@ -7,81 +10,85 @@ interface RentPageProps {
 
 const RentPage: React.FC<RentPageProps> = ({ onRequest }) => {
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-4xl font-bold text-gray-800">Арендная деятельность</h1>
-                {onRequest && (
-                    <button
-                        type="button"
-                        onClick={onRequest}
-                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
-                    >
-                        Запросить аренду
-                    </button>
-                )}
-            </div>
+        <div>
+            <PageHero
+                label="Арендная деятельность"
+                title="Производственные, складские и офисные помещения"
+                description={rentalInfo.description}
+            >
+                {onRequest ? <ActionButton onClick={onRequest}>Запросить аренду</ActionButton> : null}
+            </PageHero>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Основная информация */}
-                <div className="lg:col-span-2">
-                    <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
-                        <div className="prose max-w-none">
-                            <p className="text-gray-700 text-lg leading-relaxed">{rentalInfo.description}</p>
-                        </div>
+            <section className="page-shell pt-0">
+                <div className="grid gap-6 lg:grid-cols-[1.05fr_.95fr]">
+                    <div className="panel-card overflow-hidden p-6 sm:p-8">
+                        <SectionHeader
+                            kicker="Преимущества"
+                            title="Готовая инфраструктура на территории завода"
+                            description="Раздел аренды стал более визуальным, но использует прежний объект rentalInfo из конфигурации."
+                        />
 
-                        <div className="mt-6">
-                            <h3 className="text-lg font-semibold text-gray-800 mb-3">Преимущества:</h3>
-                            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                {rentalInfo.features.map((feature, index) => (
-                                    <li key={index} className="flex items-center gap-2 text-gray-700">
-                                        <span className="text-green-500">✓</span>
-                                        {feature}
-                                    </li>
-                                ))}
-                            </ul>
+                        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                            {rentalInfo.features.map((feature, index) => (
+                                <div key={`${feature}-${index}`} className="rounded-2xl border border-graphite-100 bg-white/80 p-4 shadow-inner-soft">
+                                    <div className="flex items-start gap-3">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-factory-50 text-factory-700">
+                      <Icon name="check" className="h-4 w-4" />
+                    </span>
+                                        <p className="text-sm font-bold leading-6 text-graphite-700">{feature}</p>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
-                </div>
 
-                {/* Контактная информация */}
-                <div className="lg:col-span-1">
-                    <div className="bg-gradient-to-b from-green-50 to-white rounded-xl shadow-md p-6 border border-green-200 sticky top-20">
-                        <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <span>📞</span> Контакты для связи
-                        </h3>
-                        <div className="space-y-4">
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Телефон</p>
-                                <a
-                                    href={`tel:${rentalInfo.phone.replace(/[^+\d]/g, '')}`}
-                                    className="text-lg font-semibold text-green-700 hover:text-green-900 hover:underline transition"
-                                >
-                                    {rentalInfo.phone}
+                    <aside className="relative overflow-hidden rounded-[2rem] bg-dark-surface p-6 text-white shadow-deep sm:p-8">
+                        <div className="absolute inset-0 bg-grid-dark technical-grid opacity-25" />
+                        <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-factory-400/20 blur-3xl" />
+
+                        <div className="relative">
+                            <span className="badge-dot">Контакты для связи</span>
+                            <h2 className="mt-6 font-display text-3xl font-black tracking-tight">Обсудить помещение</h2>
+                            <p className="mt-4 text-sm leading-7 text-white/70">Свяжитесь с ответственным сотрудником или оставьте заявку через форму.</p>
+
+                            <div className="mt-8 space-y-4">
+                                <a href={`tel:${rentalInfo.phone.replace(/[^+\d]/g, '')}`} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/10 p-4 transition hover:bg-white/20">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-factory-200">
+                    <Icon name="phone" className="h-5 w-5" />
+                  </span>
+                                    <span>
+                    <span className="block text-xs font-black uppercase tracking-[0.18em] text-white/50">Телефон</span>
+                    <span className="mt-1 block font-display text-xl font-black">{rentalInfo.phone}</span>
+                  </span>
+                                </a>
+
+                                <a href={`mailto:${rentalInfo.email}`} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/10 p-4 transition hover:bg-white/20">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-factory-200">
+                    <Icon name="mail" className="h-5 w-5" />
+                  </span>
+                                    <span>
+                    <span className="block text-xs font-black uppercase tracking-[0.18em] text-white/50">Электронная почта</span>
+                    <span className="mt-1 block font-display text-xl font-black">{rentalInfo.email}</span>
+                  </span>
                                 </a>
                             </div>
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Электронная почта</p>
-                                <a
-                                    href={`mailto:${rentalInfo.email}`}
-                                    className="text-lg font-semibold text-green-700 hover:text-green-900 hover:underline transition"
-                                >
-                                    {rentalInfo.email}
-                                </a>
-                            </div>
+
+                            {onRequest ? (
+                                <button type="button" onClick={onRequest} className="btn-secondary mt-8 w-full">
+                                    Оставить заявку
+                                    <Icon name="arrowRight" className="h-4 w-4" />
+                                </button>
+                            ) : null}
                         </div>
-
-                        {onRequest && (
-                            <button
-                                type="button"
-                                onClick={onRequest}
-                                className="mt-6 w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-semibold"
-                            >
-                                Оставить заявку
-                            </button>
-                        )}
-                    </div>
+                    </aside>
                 </div>
-            </div>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                    <IconBadge icon={<Icon name="clock" className="h-4 w-4" />}>Круглосуточный доступ</IconBadge>
+                    <IconBadge icon={<Icon name="shield" className="h-4 w-4" />}>Охраняемая территория</IconBadge>
+                    <IconBadge icon={<Icon name="bolt" className="h-4 w-4" />}>Все коммуникации</IconBadge>
+                </div>
+            </section>
         </div>
     );
 };

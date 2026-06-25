@@ -1,25 +1,21 @@
 export function Brand({ compact = false }: { compact?: boolean }) {
   return (
-    <a href="#/home" className="group flex items-center gap-3" aria-label="На главную">
-      <div className="relative grid h-11 w-11 place-items-center overflow-hidden rounded-2xl bg-graphite-950 shadow-glow">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(49,167,117,.75),transparent_40%)]" />
-        <svg viewBox="0 0 44 44" className="relative h-9 w-9 text-white" aria-hidden="true">
-          <path
-            d="M9 24c0-7.2 5.8-13 13-13h8.5v5H22a8 8 0 1 0 0 16h8.5v5H22c-7.2 0-13-5.8-13-13Z"
-            fill="currentColor"
-          />
-          <path d="M17 21h18v6H17z" fill="#31a775" />
-          <path d="m29 16 7 8-7 8" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <a href="#/home" className="group inline-flex items-center gap-3" aria-label="Смоленский завод радиодеталей">
+      <span className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-graphite-950 via-graphite-900 to-factory-800 text-white shadow-glow transition duration-300 group-hover:-translate-y-0.5">
+        <span className="absolute inset-0 bg-grid-dark technical-grid opacity-30" />
+        <svg viewBox="0 0 48 48" className="relative h-8 w-8" fill="none" aria-hidden="true">
+          <path d="M12 32.5V15.5C12 13.567 13.567 12 15.5 12H32.5C34.433 12 36 13.567 36 15.5V32.5C36 34.433 34.433 36 32.5 36H15.5C13.567 36 12 34.433 12 32.5Z" stroke="currentColor" strokeWidth="2.4" />
+          <path d="M18 18H30M18 24H30M18 30H25" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M34 14L40 8M14 34L8 40" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
         </svg>
-      </div>
-      {!compact ? (
-        <div className="leading-tight">
-          <div className="font-display text-sm font-black uppercase tracking-[0.12em] text-graphite-950 group-hover:text-factory-700">
-            СЗР
-          </div>
-          <div className="max-w-[220px] text-xs font-semibold text-graphite-500">Смоленский завод радиодеталей</div>
-        </div>
-      ) : null}
-    </a>
+      </span>
+
+        {!compact ? (
+            <span className="leading-tight">
+          <span className="block font-display text-xl font-black tracking-tight text-graphite-950 transition group-hover:text-factory-700">СЗР</span>
+          <span className="block max-w-[13rem] text-[11px] font-bold uppercase tracking-[0.18em] text-graphite-500">Смоленский завод радиодеталей</span>
+        </span>
+        ) : null}
+      </a>
   );
 }

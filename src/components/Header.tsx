@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Brand } from './Brand';
 import { Icon } from './Icon';
 
-// Статическая навигация (можно вынести в отдельный файл config.ts при желании)
 const mainNav = [
   { route: 'services', label: 'Услуги' },
   { route: 'rent', label: 'Аренда' },
@@ -14,7 +13,7 @@ const mainNav = [
 ];
 
 interface HeaderProps {
-  currentRoute: string; // или RouteId, если вы его определите отдельно
+  currentRoute: string;
   onRequest: () => void;
 }
 
@@ -35,7 +34,7 @@ export function Header({ currentRoute, onRequest }: HeaderProps) {
   }, [currentRoute]);
 
   const navLinkClass = (route: string) =>
-      `rounded-full px-4 py-2 text-sm font-bold transition duration-300 ${
+      `rounded-full px-4 py-2 text-sm font-black transition duration-300 ${
           currentRoute === route
               ? 'bg-graphite-950 text-white shadow-card'
               : 'text-graphite-700 hover:bg-white hover:text-factory-700 hover:shadow-sm'
@@ -46,13 +45,13 @@ export function Header({ currentRoute, onRequest }: HeaderProps) {
           className={`sticky top-0 z-50 border-b transition duration-300 ${
               scrolled
                   ? 'border-white/80 bg-white/90 shadow-card backdrop-blur-2xl'
-                  : 'border-white/40 bg-white/70 backdrop-blur-2xl'
+                  : 'border-white/50 bg-white/75 backdrop-blur-2xl'
           }`}
       >
         <div className="container-page flex h-20 items-center justify-between gap-4">
           <Brand />
 
-          <nav className="hidden items-center gap-1 rounded-full border border-white/70 bg-white/60 p-1 shadow-inner-soft lg:flex" aria-label="Основная навигация">
+          <nav className="hidden items-center gap-1 rounded-full border border-white/80 bg-white/70 p-1 shadow-inner-soft lg:flex" aria-label="Основная навигация">
             <a href="#/catalog" className={navLinkClass('catalog')}>
               Каталог
             </a>
@@ -68,8 +67,10 @@ export function Header({ currentRoute, onRequest }: HeaderProps) {
               +7 (4812) 31-11-92
             </a>
             <button type="button" onClick={onRequest} className="btn-primary py-2.5">
+            <span className="relative z-10 inline-flex items-center gap-2">
               Запросить расчет
               <Icon name="arrowRight" className="h-4 w-4" />
+            </span>
             </button>
           </div>
 
@@ -87,17 +88,22 @@ export function Header({ currentRoute, onRequest }: HeaderProps) {
         {open ? (
             <div className="border-t border-white/70 bg-white/95 shadow-card backdrop-blur-2xl lg:hidden">
               <div className="container-page grid gap-2 py-4">
-                <a href="#/catalog" className="rounded-2xl px-4 py-3 font-bold text-graphite-800 transition hover:bg-graphite-50 hover:text-factory-700">
+                <a href="#/catalog" className="rounded-2xl px-4 py-3 font-black text-graphite-800 transition hover:bg-graphite-50 hover:text-factory-700">
                   Каталог
                 </a>
                 {mainNav.map((item) => (
-                    <a key={item.route} href={`#/${item.route}`} className="rounded-2xl px-4 py-3 font-bold text-graphite-800 transition hover:bg-graphite-50 hover:text-factory-700">
+                    <a key={item.route} href={`#/${item.route}`} className="rounded-2xl px-4 py-3 font-black text-graphite-800 transition hover:bg-graphite-50 hover:text-factory-700">
                       {item.label}
                     </a>
                 ))}
+                <a href="tel:+74812311192" className="rounded-2xl px-4 py-3 font-black text-graphite-800 transition hover:bg-graphite-50 hover:text-factory-700">
+                  +7 (4812) 31-11-92
+                </a>
                 <button type="button" onClick={onRequest} className="btn-primary mt-2">
-                  Запросить расчет
-                  <Icon name="arrowRight" className="h-4 w-4" />
+              <span className="relative z-10 inline-flex items-center gap-2">
+                Запросить расчет
+                <Icon name="arrowRight" className="h-4 w-4" />
+              </span>
                 </button>
               </div>
             </div>
