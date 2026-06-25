@@ -1,123 +1,60 @@
-import { useMemo, useState } from 'react';
-import { productGroups, sourceLinks } from '../data';
-import type { ProductGroup } from '../types';
-import { ProductCard } from '../components/Cards';
-import { Icon } from '../components/Icon';
-import { Container, LinkButton, PageHero, SectionHeader } from '../components/UI';
+import React, { useEffect, useState } from 'react';
+import { api } from '../api/api';
 
-const filters = [
-  { id: 'all', label: 'Все изделия' },
-  { id: 'civil', label: 'Гражданское назначение' },
-  { id: 'home', label: 'Бытовая техника' },
-  { id: 'auto', label: 'Автомобильная промышленность' }
-] as const;
-
-type FilterId = (typeof filters)[number]['id'];
-
-export function CatalogPage() {
-  const [filter, setFilter] = useState<FilterId>('all');
-  const visible = useMemo(
-    () => (filter === 'all' ? productGroups : productGroups.filter((item) => item.category === filter)),
-    [filter]
-  );
-
-  return (
-    <>
-      <PageHero
-        label="Каталог"
-        title="Интерактивная структура каталога продукции"
-        description="Раздел повторяет смысл исходного каталога, но переводит его в быстрые карточки, фильтры и CTA вместо длинной PDF-навигации."
-      >
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <LinkButton href={sourceLinks.catalogPdf} variant="primary" external>
-            Скачать PDF каталог
-          </LinkButton>
-          <LinkButton href="#/price" variant="secondary">
-            Перейти к прайсу
-          </LinkButton>
-        </div>
-      </PageHero>
-
-      <section className="py-20 sm:py-24">
-        <Container>
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <SectionHeader
-              kicker="Номенклатура"
-              title="Категории продукции"
-              description="Фильтры помогают быстро найти группу изделий, а карточки показывают серии и назначение."
-            />
-            <div className="flex flex-wrap gap-2">
-              {filters.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setFilter(item.id)}
-                  className={`rounded-full px-4 py-2 text-sm font-bold transition ${
-                    filter === item.id ? 'bg-graphite-950 text-white' : 'bg-white text-graphite-600 shadow-sm hover:bg-graphite-100'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {visible.map((item) => (
-              <ProductCard key={item.id} item={item} />
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <SpecsShowcase />
-    </>
-  );
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  image_url: string;
+  category: string;
+  price: number;
 }
 
-function SpecsShowcase() {
-  const groups: ProductGroup[] = productGroups.slice(0, 3);
+const CatalogPage: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    api.getProducts()
+        .then(data => {
+          setProducts(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setError('Не удалось загрузить каталог');
+          setLoading(false);
+        });
+  }, []);
+
+  if (loading) return <div className="text-center py-10 text-gray-600">Загрузка каталога...</div>;
+  if (error) return <div className="text-center py-10 text-red-600">{error}</div>;
+
   return (
-    <section className="bg-white py-20 sm:py-24">
-      <Container>
-        <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-start">
-          <SectionHeader
-            kicker="Карточка изделия"
-            title="Так может выглядеть страница серии"
-            description="Для полноценной интеграции можно заменить демо-данные на JSON/API и открыть отдельные страницы серий с чертежами, характеристиками, схемами и вариантами заказа."
-          />
-          <div className="space-y-5">
-            {groups.map((item) => (
-              <article key={item.id} className="rounded-[2rem] border border-graphite-200 bg-graphite-50 p-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-factory-700">{item.subtitle}</p>
-                    <h3 className="mt-2 font-display text-2xl font-black text-graphite-950">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-graphite-600">{item.description}</p>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-8 text-gray-800">Каталог продукции</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {products.map(product => (
+              <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+                <img
+                    src={product.image_url || 'https://via.placeholder.com/300x200?text=Нет+изображения'}
+                    alt={product.name}
+                    className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
+                  <p className="text-gray-600 text-sm mt-1">{product.description}</p>
+                  <div className="mt-3 flex justify-between items-center">
+                    <span className="text-lg font-bold text-green-600">{product.price} ₽</span>
+                    <span className="text-xs bg-gray-200 px-2 py-1 rounded">{product.category}</span>
                   </div>
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white text-factory-700 shadow-sm">
-                    <Icon name="bolt" className="h-6 w-6" />
-                  </span>
                 </div>
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  <Spec title="Серии" value={item.codes.slice(0, 2).join(' · ')} />
-                  <Spec title="Назначение" value={item.category === 'auto' ? 'Авто' : item.category === 'home' ? 'Бытовая техника' : 'Приборы'} />
-                  <Spec title="Документы" value="ТУ / PDF" />
-                </div>
-              </article>
-            ))}
-          </div>
+              </div>
+          ))}
         </div>
-      </Container>
-    </section>
+      </div>
   );
-}
+};
 
-function Spec({ title, value }: { title: string; value: string }) {
-  return (
-    <div className="rounded-2xl bg-white p-4">
-      <div className="text-xs font-bold uppercase tracking-[0.16em] text-graphite-500">{title}</div>
-      <div className="mt-2 text-sm font-black text-graphite-950">{value}</div>
-    </div>
-  );
-}
+export default CatalogPage;

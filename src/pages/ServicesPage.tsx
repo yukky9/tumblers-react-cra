@@ -1,62 +1,61 @@
-import { serviceItems } from '../data';
-import { ServiceCard } from '../components/Cards';
-import { Container, LinkButton, PageHero, SectionHeader } from '../components/UI';
-import { Icon } from '../components/Icon';
+import React, { useEffect, useState } from 'react';
+import { api } from '../api/api';
 
-export function ServicesPage({ onRequest }: { onRequest: () => void }) {
-  return (
-    <>
-      <PageHero
-        label="Продукция и услуги"
-        title="Производственные услуги и направления завода"
-        description="Раздел объединяет каталог продукции, прайс-лист, сервисные операции и аренду помещений в понятную современную структуру."
-      >
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <LinkButton href="#/catalog" variant="primary">
-            Каталог изделий
-          </LinkButton>
-          <LinkButton href="#/rent" variant="secondary">
-            Арендная деятельность
-          </LinkButton>
+interface ServicesPageProps {
+    onRequest?: () => void;
+}
+
+interface Service {
+    id: number;
+    title: string;
+    description: string;
+    icon: string;
+    price: string;
+}
+
+const ServicesPage: React.FC<ServicesPageProps> = ({ onRequest }) => {
+    const [services, setServices] = useState<Service[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        api.getServices()
+            .then(data => {
+                setServices(data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+                setError('Не удалось загрузить услуги');
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) return <div className="text-center py-10 text-gray-600">Загрузка услуг...</div>;
+    if (error) return <div className="text-center py-10 text-red-600">{error}</div>;
+
+    return (
+        <div className="container mx-auto px-4 py-8">
+            <h1 className="text-4xl font-bold mb-8 text-gray-800">Наши услуги</h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {services.map(service => (
+                    <div key={service.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition duration-300 border-t-4 border-factory-500">
+                        <div className="text-5xl mb-4">{service.icon || '🔧'}</div>
+                        <h3 className="text-2xl font-semibold text-gray-800">{service.title}</h3>
+                        <p className="text-gray-600 mt-2">{service.description}</p>
+                        <p className="text-factory-600 font-bold mt-4">{service.price}</p>
+                    </div>
+                ))}
+            </div>
+            {onRequest && (
+                <div className="text-center mt-10">
+                    <button onClick={onRequest} className="bg-factory-600 text-white px-8 py-3 rounded-full hover:bg-factory-700 transition">
+                        Получить консультацию
+                    </button>
+                </div>
+            )}
         </div>
-      </PageHero>
+    );
+};
 
-      <section className="py-20 sm:py-24">
-        <Container>
-          <SectionHeader
-            kicker="Услуги производства"
-            title="Карточки услуг с быстрым заказом"
-            description="Список перенесен из исходного раздела и оформлен как карточки для заявок, лендингов и дальнейшей SEO-структуры."
-          />
-          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {serviceItems.map((item) => (
-              <ServiceCard key={item.title} item={item} onRequest={onRequest} />
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="bg-white py-20 sm:py-24">
-        <Container>
-          <div className="grid gap-5 lg:grid-cols-3">
-            <Feature title="Разработка и проектирование" text="Можно расширить раздел отдельными страницами услуг, технологическими ограничениями и формой ТЗ." />
-            <Feature title="Изготовление и тестирование" text="Карточка заявки подходит для прикрепления чертежей и отправки параметров партии." />
-            <Feature title="Интеграция с отделом продаж" text="Форму можно подключить к e-mail, CRM, Telegram-боту или backend API." />
-          </div>
-        </Container>
-      </section>
-    </>
-  );
-}
-
-function Feature({ title, text }: { title: string; text: string }) {
-  return (
-    <article className="rounded-[2rem] border border-graphite-200 bg-graphite-50 p-6">
-      <div className="grid h-12 w-12 place-items-center rounded-2xl bg-graphite-950 text-factory-300">
-        <Icon name="check" className="h-6 w-6" />
-      </div>
-      <h3 className="mt-6 font-display text-xl font-black text-graphite-950">{title}</h3>
-      <p className="mt-3 text-sm leading-7 text-graphite-600">{text}</p>
-    </article>
-  );
-}
+export default ServicesPage;

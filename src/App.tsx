@@ -2,15 +2,36 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { FloatingConsultant, RequestModal } from './components/RequestModal';
-import { CatalogPage } from './pages/CatalogPage';
+import CatalogPage from './pages/CatalogPage';
 import { ContactsPage } from './pages/ContactsPage';
-import { DocumentPage, DetailsPage, InfoPage, PartnersPage, ProcurementPage } from './pages/InfoPages';
-import { HomePage } from './pages/HomePage';
-import { PricePage } from './pages/PricePage';
-import { RentPage } from './pages/RentPage';
-import { ServicesPage } from './pages/ServicesPage';
-import { VacanciesPage } from './pages/VacanciesPage';
-import type { RouteId } from './types';
+import {
+  InfoPage,
+  DocumentPage,
+  PartnersPage,
+  DetailsPage,
+  ProcurementPage
+} from './pages/InfoPages'; // ✅ Именованные импорты
+import HomePage from './pages/HomePage';
+import PricePage from './pages/PricePage';
+import RentPage from './pages/RentPage';
+import ServicesPage from './pages/ServicesPage';
+import VacanciesPage from './pages/VacanciesPage';
+
+type RouteId =
+    | 'home'
+    | 'catalog'
+    | 'services'
+    | 'rent'
+    | 'info'
+    | 'price'
+    | 'contacts'
+    | 'vacancies'
+    | 'years'
+    | 'finance'
+    | 'sout'
+    | 'partners'
+    | 'details'
+    | 'procurement';
 
 const routes: RouteId[] = [
   'home',
@@ -62,7 +83,7 @@ export default function App() {
       case 'info':
         return <InfoPage />;
       case 'price':
-        return <PricePage />;
+        return <PricePage onRequest={openRequest} />;
       case 'contacts':
         return <ContactsPage />;
       case 'vacancies':
@@ -86,12 +107,12 @@ export default function App() {
   }, [openRequest, route]);
 
   return (
-    <div className="min-h-screen bg-graphite-50 text-graphite-950">
-      <Header currentRoute={route} onRequest={openRequest} />
-      <main>{page}</main>
-      <Footer onRequest={openRequest} />
-      <FloatingConsultant onRequest={openRequest} />
-      <RequestModal open={requestOpen} onClose={closeRequest} />
-    </div>
+      <div className="min-h-screen bg-graphite-50 text-graphite-950">
+        <Header currentRoute={route} onRequest={openRequest} />
+        <main>{page}</main>
+        <Footer onRequest={openRequest} />
+        <FloatingConsultant onRequest={openRequest} />
+        <RequestModal open={requestOpen} onClose={closeRequest} />
+      </div>
   );
 }
