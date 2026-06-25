@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { api } from '../api/api';
 
 interface HomePageProps {
@@ -29,16 +28,20 @@ const HomePage: React.FC<HomePageProps> = ({ onRequest }) => {
 
     return (
         <div>
-            {/* Hero-блок (можно оставить как есть) */}
-            <section className="bg-gradient-to-r from-factory-700 to-factory-900 text-white py-20">
+            {/* Hero-блок */}
+            <section className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-20">
                 <div className="container mx-auto px-4 text-center">
-                    <h1 className="text-5xl font-bold mb-4">Тумблеры.рф</h1>
+                    <h1 className="text-5xl font-bold mb-4">Каталог нашей продукции</h1>
                     <p className="text-xl max-w-3xl mx-auto">
                         Российский производитель и разработчик коммутационных изделий для цепей управления, контроля, сигнализации и диагностики.
                     </p>
                     {onRequest && (
-                        <button onClick={onRequest} className="mt-8 bg-white text-factory-700 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
-                            Связаться с нами
+                        <button
+                            type="button"
+                            onClick={onRequest}
+                            className="mt-6 bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition"
+                        >
+                            Оставить заявку
                         </button>
                     )}
                 </div>
@@ -63,9 +66,9 @@ const HomePage: React.FC<HomePageProps> = ({ onRequest }) => {
                         </div>
                     )}
                     <div className="text-center mt-6">
-                        <Link to="/catalog" className="inline-block bg-factory-600 text-white px-6 py-2 rounded hover:bg-factory-700 transition">
+                        <a href="#/catalog" className="inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
                             Весь каталог
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -79,24 +82,33 @@ const HomePage: React.FC<HomePageProps> = ({ onRequest }) => {
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {services.map(service => (
-                                <div key={service.id} className="bg-gray-50 rounded-lg p-6 text-center hover:shadow-lg transition border-t-4 border-factory-500">
+                                <div key={service.id} className="bg-gray-50 rounded-lg p-6 text-center hover:shadow-lg transition border-t-4 border-green-500">
                                     <div className="text-4xl mb-3">{service.icon || '🔧'}</div>
                                     <h3 className="text-xl font-semibold">{service.title}</h3>
                                     <p className="text-gray-600 mt-2">{service.description}</p>
-                                    <p className="text-factory-600 font-bold mt-3">{service.price}</p>
+                                    <p className="text-green-600 font-bold mt-3">{service.price}</p>
                                 </div>
                             ))}
                         </div>
                     )}
                     <div className="text-center mt-6">
-                        <Link to="/services" className="inline-block bg-factory-600 text-white px-6 py-2 rounded hover:bg-factory-700 transition">
+                        <a href="#/services" className="inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
                             Все услуги
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </section>
 
-            {/* Остальные статические блоки (О нас, Акционерам) можно оставить */}
+            {/* Блок "О нас" */}
+            <section className="py-12 bg-gray-100">
+                <div className="container mx-auto px-4">
+                    <h2 className="text-3xl font-bold text-center mb-8">О нас</h2>
+                    <div className="max-w-4xl mx-auto text-gray-700 space-y-4">
+                        <p>ОАО «Смоленский завод радиодеталей», основанное в 1961 году, и более 60 лет является одним из крупнейших предприятий, выпускающих коммутационные и установочные изделия.</p>
+                        <p>Постановлением Совета Министров РСФСР №106-1 от 29.01.1959 года началось строительство завода радиодеталей по производству коммутационных и установочных изделий в Смоленске, в октябре 1961 года Смоленский завод радиодеталей вступил в строй действующих.</p>
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };
