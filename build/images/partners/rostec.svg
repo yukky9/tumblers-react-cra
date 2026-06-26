@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+  <title id="title">Госкорпорация Ростех</title>
+  <desc id="desc">Декоративная фото-обложка карточки партнера</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07141c"/>
+      <stop offset="0.55" stop-color="#12344a"/>
+      <stop offset="1" stop-color="#16a37f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="72%" cy="28%" r="62%">
+      <stop offset="0" stop-color="#8ff2d1" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#8ff2d1" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0v42" fill="none" stroke="#fff" stroke-opacity="0.09" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="520" rx="42" fill="url(#bg)"/>
+  <rect width="900" height="520" rx="42" fill="url(#glow)"/>
+  <rect width="900" height="520" rx="42" fill="url(#grid)"/>
+  <path d="M96 365h708" stroke="#fff" stroke-opacity="0.16" stroke-width="4"/>
+  <path d="M124 350V230l86 44 82-70 96 72 94-92 122 166" fill="none" stroke="#fff" stroke-opacity="0.34" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(118 96)">
+    <rect width="136" height="136" rx="36" fill="#fff" fill-opacity="0.13" stroke="#fff" stroke-opacity="0.3" stroke-width="3"/>
+    <path d="M35 81c21-44 59-51 87-36-8 42-37 68-87 36Z" fill="#b8ffe9" fill-opacity="0.94"/>
+    <circle cx="70" cy="68" r="17" fill="#fff" fill-opacity="0.74"/>
+  </g>
+  <text x="118" y="328" fill="#fff" font-size="66" font-weight="800" font-family="Arial, Helvetica, sans-serif">Ростех</text>
+  <text x="122" y="376" fill="#c5fff0" fill-opacity="0.86" font-size="24" font-weight="700" letter-spacing="5" font-family="Arial, Helvetica, sans-serif">ГОСКОРПОРАЦИЯ</text>
+</svg>
