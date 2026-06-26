@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:8000'; // или ваш реальный адрес бэкенда
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000';
 
 export const api = {
     // Продукция
